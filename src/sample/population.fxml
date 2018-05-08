@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Population">
+    <children>
+        <Button fx:id="resetButton" layoutX="10" layoutY="10" onAction="#handleResetButtonAction"
+                text="Reset population!"/>
+        <Button fx:id="ageButton" layoutX="150" layoutY="10" onAction="#handleAgeButtonAction" text="Age!"/>
+        <Button fx:id="ageAllButton" layoutX="210" layoutY="10" onAction="#handleAgeAllButtonAction" text="Age all!"/>
+        <Button fx:id="randomSexButton" layoutX="260" layoutY="10" onAction="#handleRandomSexButtonAction"
+                text="Random sex"/>
+        <ListView fx:id="populationView" layoutX="10" layoutY="40" onMouseClicked="#handleSelectHuman"
+                  prefHeight="289.0" prefWidth="353.0"/>
+        <TreeView fx:id="ancestorsTree" layoutX="400" layoutY="30" prefHeight="400.0" prefWidth="500.0"/>
+        <TreeView fx:id="childrenTree" layoutX="400" layoutY="450" prefHeight="400.0" prefWidth="500.0"/>
+    </children>
+</AnchorPane>
