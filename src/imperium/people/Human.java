@@ -1,5 +1,9 @@
 package imperium.people;
 
+import imperium.politics.Family;
+import imperium.politics.FamilyRulerTitle;
+import imperium.politics.Property;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +16,7 @@ public class Human {
     private Genome genome = Genome.getRandom();
     private long age = 0;
     private Long diedInAge;
+    private List<Property> properties = new ArrayList<>(0);
 
     private Human(String name, Human mother, Human father, Family family) {
         this.name = name;
@@ -24,6 +29,7 @@ public class Human {
         this.name = Name.getRandomMaleName();
         this.genome = Genome.getRandom();
         this.family = new Family(this);
+        this.properties.add(new FamilyRulerTitle(this.family));
     }
 
     public String getName() {
@@ -47,11 +53,19 @@ public class Human {
     }
 
     public void age() {
+        if (diedInAge != null) {
+            return; // dead doesn't age
+        }
         age++;
     }
 
     public void die() {
         diedInAge = age;
+        properties = null;
+    }
+
+    public List<Property> getProperties() {
+        return properties;
     }
 
     public long getLifeLength() {
@@ -102,6 +116,22 @@ public class Human {
 
     @Override
     public String toString() {
-        return name + " from " + family.getName() + " (age: " + age + ", generation: " + this.getPreviousGenerationsCount() + ")";
+        if (isAlive()) {
+            String titles = "";
+            if (properties != null) {
+                for (Property property : properties) {
+                    if (property instanceof FamilyRulerTitle) {
+                        titles += " Ruler of " + family.getName();
+                    }
+                }
+            }
+            if (Family.getHeir(family.getRuler()) == this) {
+                titles += " Heir of " + family.getName();
+            }
+            return name + " from " + family.getName() + " (age: " + age + ", g: " + this.getPreviousGenerationsCount() + titles + ")";
+        } else {
+            return name + " from " + family.getName() + " (died in age: " + diedInAge + ")";
+
+        }
     }
 }

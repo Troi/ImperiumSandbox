@@ -1,4 +1,4 @@
-package imperium.people;
+package imperium.politics;
 
 public class FamilyRule {
     private Type type;
