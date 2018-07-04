@@ -2,6 +2,7 @@ package sample;
 
 import imperium.people.Human;
 import imperium.people.Soul;
+import imperium.politics.Family;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,26 +34,24 @@ public class Population implements Initializable {
 
     @FXML
     private void handleResetButtonAction(ActionEvent event) {
-        int count = 5;
-        population = new ArrayList<>(count);
-        for (int i = 0; i < count; i++) {
+        int initialPeopleCount = 5;
+        int generationCount = 3;
+        int breedRatio = 15;
+        population = new ArrayList<>(generationCount * initialPeopleCount);
+        for (int i = 0; i < initialPeopleCount; i++) {
             population.add(new Human());
         }
 
-        for (int i = 0; i < count; i++) {
-            List<Human> children = new ArrayList<>(population.size());
+        for (int i = 0; i < generationCount; i++) {
+            System.out.println("Generation #" + i);
+            List<Human> children = new ArrayList<>(population.size() * breedRatio);
             for (Human h : population) {
-                Random rnd = new Random();
-                Human second = population.get(rnd.nextInt(population.size() - 1));
-                if (second != h && !h.isAncestor(second) && !second.isAncestor(h)) {
-                    children.add(h.makeOffspring(second));
-                }
-                Human third = population.get(rnd.nextInt(population.size() - 1));
-                if (third != h && !h.isAncestor(third) && !third.isAncestor(h)) {
-                    children.add(h.makeOffspring(third));
-                }
-                h.die();
+                if (!h.isAlive()) continue;
+                children.addAll(this.makeChildren(h, breedRatio));
+                h.age();
+                Family.humanDeath(h);
             }
+            System.out.println("People in generation " + children.size());
             population.addAll(children);
         }
 
@@ -81,6 +80,15 @@ public class Population implements Initializable {
         System.out.println("Selected " + selected);
         System.out.println("Mother " + selected.getMother());
         System.out.println("Father " + selected.getFather());
+        if (selected.getFamily() != null) {
+            System.out.println("Family " + selected.getFamily().getName());
+            System.out.println("Family ruler " + selected.getFamily().getRuler().getName());
+            if (selected.getFamily().getHeir() != null) {
+                System.out.println("Family heir " + selected.getFamily().getHeir().getName());
+            } else {
+                System.out.println("Family has no heir");
+            }
+        }
         ancestorsTree.setRoot(new AncestorTreeItem(selected));
         childrenTree.setRoot(new ChildrenTreeItem(selected));
     }
@@ -89,11 +97,23 @@ public class Population implements Initializable {
     private void handleRandomSexButtonAction(ActionEvent event) {
         if (populationView.getSelectionModel().getSelectedItem() == null) return;
         Human selected = populationView.getSelectionModel().getSelectedItem();
-        Random rnd = new Random();
-        Human second = population.get(rnd.nextInt(population.size() - 1));
-        population.add(selected.makeOffspring(second));
+        population.addAll(makeChildren(selected, 1));
 
         populationView.getItems().setAll(population);
+    }
+
+    private List<Human> makeChildren(Human human, int count) {
+        System.out.println("Try to make " + count + " offsprings");
+        List<Human> children = new ArrayList<>(count);
+        Random rnd = new Random();
+        for (int i = 0; i < count; i++) {
+            Human second = population.get(rnd.nextInt(population.size() - 1));
+            if (second != human && !human.isAncestor(second) && !second.isAncestor(human) && second.isAlive()) {
+                children.add(human.makeOffspring(second));
+            }
+        }
+        System.out.println(children.size() + " offsprings made");
+        return children;
     }
 
     @Override
