@@ -5,8 +5,8 @@ import imperium.map.source.resource.MapResourceInterface;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractGravityObject implements MapResourceInterface {
-    private List<MapResourceInterface> satelites;
+public abstract class AbstractGravityObject extends AbstractStellarObject implements MapResourceInterface {
+    private List<AbstractStellarObject> satelites;
 
     private long mass = 1;
     private long size = 1;
@@ -18,19 +18,16 @@ public abstract class AbstractGravityObject implements MapResourceInterface {
         this.satelites = new ArrayList<>();
     }
 
-    public AbstractGravityObject(List<MapResourceInterface> satelites) {
-        this.satelites = satelites;
-    }
-
-    public List<MapResourceInterface> getSatelites() {
+    public List<AbstractStellarObject> getSatelites() {
         return satelites;
     }
 
-    public void setSatelites(List<MapResourceInterface> satelites) {
-        this.satelites = satelites;
+    public void addSatelite(AbstractStellarObject satelite, long radius) {
+        this.addSatelite(satelite, radius, 0);
     }
 
-    public void addSatelite(MapResourceInterface satelite) {
+    public void addSatelite(AbstractStellarObject satelite, long radius, long offset) {
+        satelite.setOrbit(new Orbit(this, radius, offset));
         this.satelites.add(satelite);
     }
 

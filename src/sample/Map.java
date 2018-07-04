@@ -41,12 +41,9 @@ public class Map implements Initializable {
             MapResourceInterface resource = mapTree.getSelectionModel().getSelectedItem().getValue();
 
             if (resource instanceof AbstractGravityObject) {
-                ((AbstractGravityObject) resource).addSatelite(new SpaceStation());
+                ((AbstractGravityObject) resource).addSatelite(new SpaceStation(), 10, 1);
             }
-            System.out.println("Added");
             mapTree.setRoot(new PlanetTreeItem(map.getResources().iterator().next()));
-        } else {
-            System.out.println("getSelectedItem() NULL");
         }
     }
 
@@ -62,6 +59,11 @@ public class Map implements Initializable {
                 descriptions.add("Amosphere height: " + object.getAtmosphereHeight()+" Km");
                 descriptions.add("G: " + object.getG()+" ");
                 descriptions.add("Rotation period: " + object.getRotationPeriod()+" h");
+                if (object.getOrbit() != null) {
+                    descriptions.add("Orbit around: " + object.getOrbit().getCentralObject());
+                    descriptions.add("Orbit period: " + object.getOrbit().getOrbitPeriod() + " h");
+                    descriptions.add("Orbit above ground: " + object.getOrbit().getRadius() + " m");
+                }
                 this.resourceDescription.setItems(descriptions);
             }
         }
@@ -71,7 +73,6 @@ public class Map implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.map  = new SystemMap();
         for (PoliticMapResourceDecorator mapResource: map.getPersonalizedResources(null)){
-            System.out.println(mapResource);
             mapTree.setRoot(new PlanetTreeItem(mapResource));
         }
     }
@@ -91,7 +92,6 @@ public class Map implements Initializable {
             ObservableList<TreeItem<MapResourceInterface>> children = FXCollections.observableArrayList();
 
             MapResourceInterface value = this.getValue();
-            System.out.println(value);
             if (value instanceof AbstractGravityObject) {
                 for (MapResourceInterface satelite : ((AbstractGravityObject) value).getSatelites()) {
                     children.add(new PlanetTreeItem(satelite));
