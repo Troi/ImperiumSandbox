@@ -22,7 +22,7 @@ import javafx.scene.control.TreeView;
 import java.net.URL;
 import java.util.*;
 
-public class Map implements Initializable {
+public class StarSystemMap implements Initializable {
 
     private SystemMap map;
 

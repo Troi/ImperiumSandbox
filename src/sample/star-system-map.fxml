@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Map">
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.StarSystemMap">
     <children>
         <Button fx:id="addStationButton" layoutX="10.0" layoutY="14.0" onAction="#handleAddStationButtonAction" text="Add orbital station" />
         <TreeView fx:id="mapTree" layoutX="14.0" layoutY="52.0" onMouseClicked="#handleSelectMapAction" prefHeight="727.0" prefWidth="500.0" />
