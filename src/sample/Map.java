@@ -20,10 +20,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Map implements Initializable {
 
@@ -57,9 +54,16 @@ public class Map implements Initializable {
     private void handleSelectMapAction() {
         if (mapTree.getSelectionModel().getSelectedItem() != null) {
             MapResourceInterface resource = mapTree.getSelectionModel().getSelectedItem().getValue();
-            System.out.println(resource);
-        } else {
-            System.out.println("getSelectedItem() NULL");
+            if (resource instanceof AbstractGravityObject) {
+                AbstractGravityObject object = (AbstractGravityObject) resource;
+                ObservableList<String> descriptions = FXCollections.observableArrayList();
+                descriptions.add("Mass: " + object.getMass()+" MT");
+                descriptions.add("Size: " + object.getSize()+" Km");
+                descriptions.add("Amosphere height: " + object.getAtmosphereHeight()+" Km");
+                descriptions.add("G: " + object.getG()+" ");
+                descriptions.add("Rotation period: " + object.getRotationPeriod()+" h");
+                this.resourceDescription.setItems(descriptions);
+            }
         }
     }
 
